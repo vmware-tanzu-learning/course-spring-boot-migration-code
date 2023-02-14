@@ -5,19 +5,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.sql.DataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private DataSource dataSource;
-
-    public SecurityConfig(DataSource dataSource){
-        this.dataSource = dataSource;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,27 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        UserDetails sarah = User.withDefaultPasswordEncoder()
-                .username("sarah1")
-                .password("abc123")
-                .roles("CARD-OWNER")
-                .build();
-        UserDetails kumar =User.withDefaultPasswordEncoder()
-                .username("kumar2")
-                .password("xyz789")
-                .roles("CARD-OWNER")
-                .build();
-        UserDetails outsider = User.withDefaultPasswordEncoder()
-                .username("non-owner3")
-                .password("non-owner3")
-                .roles("SOME-OTHER-ROLE")
-                .build();
-
-
-        auth.jdbcAuthentication()
-                .withDefaultSchema()
-                .dataSource(this.dataSource)
-                .withUser(sarah).withUser(kumar).withUser(outsider);
-
+        auth
+                .ldapAuthentication()
+                .userDnPatterns("uid={0},ou=people")
+                .groupSearchBase("ou=groups")
+                .groupSearchFilter("(uniqueMember={0})")
+                .contextSource()
+                .url("ldap://localhost:8389/dc=cashcards,dc=com")
+                .and()
+                .passwordCompare()
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .passwordAttribute("userPassword");
     }
 }

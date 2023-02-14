@@ -1,0 +1,54 @@
+dn: dc=cashcards,dc=com
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: cashcards
+
+dn: ou=groups,dc=cashcards,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=cashcards,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=sarah1,ou=people,dc=cashcards,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Sarah Clayton
+sn: Sarah
+uid: sarah1
+userPassword: $2a$12$.kpuYr.orWCWdV/sHA6Kveq6XKcCZ6rhHkYDM587iW64HnzcgHHji
+
+dn: uid=bob,ou=people,dc=cashcards,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Bob Hamilton
+sn: Hamilton
+uid: bob
+userPassword: $2a$12$3hVbpGPl814l/NjFspQ2gupC1Xdp/c3j3eFg/DxvN2XvvssepPXI.
+
+dn: uid=michael,ou=people,dc=cashcards,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Michael Jordan
+sn: Michael
+uid: michael
+userPassword: $2a$12$8FIorj9XOgslALG/Lgb5o.R3wfLu2943LIdiU5TtQUIJTyTnnCAL.
+
+
+dn: cn=card-owner,ou=groups,dc=cashcards,dc=com
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: card-owner
+ou: card-owner
+uniqueMember: uid=sarah1,ou=people,dc=cashcards,dc=com
+uniqueMember: uid=bob,ou=people,dc=cashcards,dc=com
