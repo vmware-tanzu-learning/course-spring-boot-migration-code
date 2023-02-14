@@ -51,4 +51,16 @@ public class CashCardController {
                         pageable.getSortOr(Sort.by(Sort.Direction.DESC, "amount"))));
         return ResponseEntity.ok(page.toList());
     }
+
+    @GetMapping("/demo")
+    public ResponseEntity<Collection<CashCard>> demoCards(){
+        Collection<CashCard> demo = new ArrayList<CashCard>() {{
+            add(new CashCard(50L,20.00,"Owen"));
+            add(new CashCard(51L,30.50,"Keanu"));
+            add(new CashCard(60L,100.00,"George"));
+            add(new CashCard(75L,75.50,"Alec"));
+            add(new CashCard(76L,20.0,"Julia"));
+        }};
+        return ResponseEntity.ok(demo);
+    }
 }
