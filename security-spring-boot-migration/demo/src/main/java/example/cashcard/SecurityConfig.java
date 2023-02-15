@@ -3,6 +3,7 @@ package example.cashcard;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .httpBasic();
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/cashcards/demo");
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         UserDetails sarah = User.withDefaultPasswordEncoder()
