@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/cashcards/demo");
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         UserDetails sarah = User.withDefaultPasswordEncoder()
