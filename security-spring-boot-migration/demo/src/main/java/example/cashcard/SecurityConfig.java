@@ -1,17 +1,23 @@
 package example.cashcard;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     private DataSource dataSource;
 
@@ -19,44 +25,48 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.dataSource = dataSource;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests()
-                        .antMatchers("/cashcards/**").hasRole("CARD-OWNER")
-                .and()
-                    .httpBasic();
-
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/cashcards/**").hasRole("CARD-OWNER")
+                )
+                .httpBasic(withDefaults());
+        return http.build();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/cashcards/demo");
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/cashcards/demo");
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        UserDetails sarah = User.withDefaultPasswordEncoder()
+    @Bean
+    public UserDetailsManager users(DataSource dataSource) {
+        UserDetails sarah = User.builder()
                 .username("sarah1")
-                .password("abc123")
+                .password(passwordEncoder().encode("abc123"))
                 .roles("CARD-OWNER")
                 .build();
-        UserDetails kumar =User.withDefaultPasswordEncoder()
+        UserDetails kumar =User.builder()
                 .username("kumar2")
-                .password("xyz789")
+                .password(passwordEncoder().encode("xyz789"))
                 .roles("CARD-OWNER")
                 .build();
-        UserDetails outsider = User.withDefaultPasswordEncoder()
+        UserDetails outsider = User.builder()
                 .username("non-owner3")
-                .password("non-owner3")
+                .password(passwordEncoder().encode("non-owner3"))
                 .roles("SOME-OTHER-ROLE")
                 .build();
 
+        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+        users.createUser(sarah);
+        users.createUser(kumar);
+        users.createUser(outsider);
+        return users;
+    }
 
-        auth.jdbcAuthentication()
-                .withDefaultSchema()
-                .dataSource(this.dataSource)
-                .withUser(sarah).withUser(kumar).withUser(outsider);
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
