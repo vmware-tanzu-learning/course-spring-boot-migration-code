@@ -24,25 +24,25 @@ sn: Sarah
 uid: sarah1
 userPassword: $2a$12$.kpuYr.orWCWdV/sHA6Kveq6XKcCZ6rhHkYDM587iW64HnzcgHHji
 
-dn: uid=bob,ou=people,dc=cashcards,dc=com
+dn: uid=kumar2,ou=people,dc=cashcards,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
-cn: Bob Hamilton
+cn: Kummar Hamilton
 sn: Hamilton
-uid: bob
-userPassword: $2a$12$3hVbpGPl814l/NjFspQ2gupC1Xdp/c3j3eFg/DxvN2XvvssepPXI.
+uid: kumar2
+userPassword: $2a$12$.iWneMdoOLCErNomq8gtMOy9YnA.cbK2mIwMNnEch0apAD34jBkP2
 
-dn: uid=michael,ou=people,dc=cashcards,dc=com
+dn: uid=non-owner3,ou=people,dc=cashcards,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
-cn: Michael Jordan
+cn: Non-Owner Jordan
 sn: Michael
-uid: michael
-userPassword: $2a$12$8FIorj9XOgslALG/Lgb5o.R3wfLu2943LIdiU5TtQUIJTyTnnCAL.
+uid: non-owner3
+userPassword: $2a$12$vsu/fNfinfFIo4QS9Mtck.eu0K8a.N0KtZQbLu8hj8MjdeM0kuRJ.
 
 
 dn: cn=card-owner,ou=groups,dc=cashcards,dc=com
@@ -51,4 +51,4 @@ objectclass: groupOfUniqueNames
 cn: card-owner
 ou: card-owner
 uniqueMember: uid=sarah1,ou=people,dc=cashcards,dc=com
-uniqueMember: uid=bob,ou=people,dc=cashcards,dc=com
+uniqueMember: uid=kumar2,ou=people,dc=cashcards,dc=com
