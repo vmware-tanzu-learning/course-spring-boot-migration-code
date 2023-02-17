@@ -19,12 +19,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfig {
 
-    private DataSource dataSource;
-
-    public SecurityConfig(DataSource dataSource){
-        this.dataSource = dataSource;
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
